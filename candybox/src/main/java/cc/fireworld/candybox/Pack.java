@@ -43,7 +43,6 @@ public class Pack {
 
         if (!type.equals(pack.type)) return false;
         return candy != null ? candy.equals(pack.candy) : pack.candy == null;
-
     }
 
     @Override
