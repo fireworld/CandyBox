@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 
+import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -17,7 +18,7 @@ public class CandyBox {
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private Collection<Eater> eaters = new ConcurrentLinkedQueue<>();
-    private SoftReference<Pack> last;
+    private Reference<Pack> last;
 
     public static boolean register(@NonNull Eater eater) {
         return getInstance().realRegister(eater);
