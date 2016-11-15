@@ -69,7 +69,7 @@ public class CandyBox {
         }
     }
 
-    public boolean realUnregister(@NonNull Eater eater) {
+    private boolean realUnregister(@NonNull Eater eater) {
         return eaters.remove(checkNotNull(eater));
     }
 
