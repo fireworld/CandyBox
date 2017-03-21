@@ -95,8 +95,10 @@ public class CandyBox {
     private void realDestroy() {
         eaters.clear();
         eaters = null;
-        last.clear();
-        last = null;
+        if (last != null) {
+            last.clear();
+            last = null;
+        }
         handler = null;
         instance = null;
     }
