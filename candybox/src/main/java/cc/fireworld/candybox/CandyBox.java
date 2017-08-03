@@ -29,7 +29,11 @@ public class CandyBox {
     }
 
     public static void put(@NonNull Pack pack) {
-        getInstance().realPut(pack);
+        put(pack, false);
+    }
+
+    public static void put(@NonNull Pack pack, boolean disposable) {
+        getInstance().realPut(pack, disposable);
     }
 
     public static void destroy() {
@@ -73,18 +77,16 @@ public class CandyBox {
         return eaters.remove(checkNotNull(eater));
     }
 
-    private void realPut(@NonNull Pack pack) {
+    private void realPut(@NonNull Pack pack, boolean disposable) {
         last = new SoftReference<>(checkNotNull(pack));
-        notifyEaters(pack);
+        notifyEaters(disposable);
     }
 
-    private void notifyEaters(@NonNull Pack p) {
+    private void notifyEaters(boolean disposable) {
         if (isMainThread()) {
-            for (Eater e : eaters) {
-                e.onEat(p);
-            }
+            multiDispatch(eaters, last, disposable);
         } else {
-            handler.post(new MultiDispatcher(eaters, p));
+            handler.post(new MultiDispatcher(eaters, last, disposable));
         }
     }
 
@@ -104,34 +106,34 @@ public class CandyBox {
     }
 
     private static class SingleDispatcher implements Runnable {
-        private Eater e;
+        private Eater eater;
         private Pack p;
 
-        private SingleDispatcher(@NonNull Eater e, @NonNull Pack p) {
-            this.e = e;
+        private SingleDispatcher(@NonNull Eater eater, @NonNull Pack p) {
+            this.eater = eater;
             this.p = p;
         }
 
         @Override
         public void run() {
-            e.onEat(p);
+            eater.onEat(p);
         }
     }
 
     private static class MultiDispatcher implements Runnable {
-        private Collection<Eater> col;
-        private Pack p;
+        private Collection<Eater> eaters;
+        private Reference<Pack> ref;
+        private boolean disposable;
 
-        private MultiDispatcher(@NonNull Collection<Eater> col, @NonNull Pack p) {
-            this.col = col;
-            this.p = p;
+        private MultiDispatcher(@NonNull Collection<Eater> eaters, @NonNull Reference<Pack> ref, boolean disposable) {
+            this.eaters = eaters;
+            this.ref = ref;
+            this.disposable = disposable;
         }
 
         @Override
         public void run() {
-            for (Eater e : col) {
-                e.onEat(p);
-            }
+            multiDispatch(eaters, ref, disposable);
         }
     }
 
@@ -145,5 +147,17 @@ public class CandyBox {
             throw new NullPointerException("Can not be null.");
         }
         return t;
+    }
+
+    private static void multiDispatch(Collection<Eater> eaters, Reference<Pack> ref, boolean disposable) {
+        Pack p;
+        if (ref != null && (p = ref.get()) != null) {
+            for (Eater e : eaters) {
+                e.onEat(p);
+            }
+            if (disposable) {
+                ref.clear();
+            }
+        }
     }
 }

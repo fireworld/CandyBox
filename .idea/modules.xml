@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CandyBox.iml" filepath="$PROJECT_DIR$/CandyBox.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CandyBox.iml" filepath="$PROJECT_DIR$/CandyBox.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/candybox/candybox.iml" filepath="$PROJECT_DIR$/candybox/candybox.iml" />
       <module fileurl="file://$PROJECT_DIR$/candybox/candybox.iml" filepath="$PROJECT_DIR$/candybox/candybox.iml" />
     </modules>
   </component>
