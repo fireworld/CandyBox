@@ -62,13 +62,13 @@ public class CandyBox {
         return result;
     }
 
-    private void giveLastPack(@NonNull Eater e) {
+    private void giveLastPack(@NonNull Eater eater) {
         Pack p;
         if (last != null && (p = last.get()) != null) {
             if (isMainThread()) {
-                e.onEat(p);
+                eater.onEat(p);
             } else {
-                handler.post(new SingleDispatcher(e, p));
+                handler.post(new SingleDispatcher(eater, p));
             }
         }
     }
